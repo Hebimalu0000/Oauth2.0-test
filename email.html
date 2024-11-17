@@ -9,17 +9,26 @@
   <body>
     <p>Please Wait...</p>
     <script>
-      Email.send({
-        Host : "smtp.elasticemail.com",
-        Username : "noreply.hebimalu05819052@example.com",
-        Password : "9EA3F50B0759BC31CF09011810A873A4CA25",
-        To : 'yukasky0319@gmail.com',
-        From : "noreply.hebimalu05819052@example.com",
-        Subject : "Test",
-        Body : "Test mail"
-      }).then(
-        message => alert(message)
-      );
+      document.getElementById('contact-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var email = document.getElementById('email').value;
+        var message = document.getElementById('message').value;
+
+        fetch('https://email-api-service.com/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            message: message
+          })
+        })
+        .then(response => response.json())
+        .then(data => console.log('メール送信成功:', data))
+        .catch(error => console.error('エラー:', error));
+      });
     </script>
   </body>
 </html>
