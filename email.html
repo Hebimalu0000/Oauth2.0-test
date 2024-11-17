@@ -9,25 +9,55 @@
   <body>
     <p>Please Wait...</p>
     <script>
+      // 現在のURLからクエリパラメータを取得
       let url = new URL(window.location.href);
       let params = url.searchParams;
 
       var email = params.get('email');
       var type = params.get('type');
 
-      fetch('https://email-api-service.com/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          message: message
+      // メッセージデータを格納したJSONファイルのURL
+      var jsonUrl = 'https://example.com/messages.json';
+
+      // JSONファイルを取得し、その内容を使用してメールを送信
+      fetch(jsonUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('JSONファイルの取得に失敗しました');
+          }
+          return response.json();
         })
-      })
-      .then(response => response.json())
-      .then(data => console.log('メール送信成功:', data))
-      .catch(error => console.error('エラー:', error));
+        .then(data => {
+          // JSONからtypeに基づくメッセージを取得
+          var message = data[type];
+          if (!message) {
+            throw new Error('指定されたtypeに対応するメッセージが見つかりません');
+          }
+
+          // メールを送信
+          return fetch('https://email-api-service.com/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              message: message
+            })
+          });
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('メール送信に失敗しました');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('メール送信成功:', data);
+        })
+        .catch(error => {
+          console.error('エラー:', error);
+        });
     </script>
   </body>
 </html>
