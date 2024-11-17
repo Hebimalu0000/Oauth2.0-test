@@ -9,26 +9,25 @@
   <body>
     <p>Please Wait...</p>
     <script>
-      document.getElementById('contact-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+      let url = new URL(window.location.href);
+      let params = url.searchParams;
 
-        var email = document.getElementById('email').value;
-        var message = document.getElementById('message').value;
+      var email = params.get('email');
+      var type = params.get('type');
 
-        fetch('https://email-api-service.com/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            message: message
-          })
+      fetch('https://email-api-service.com/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          message: message
         })
-        .then(response => response.json())
-        .then(data => console.log('メール送信成功:', data))
-        .catch(error => console.error('エラー:', error));
-      });
+      })
+      .then(response => response.json())
+      .then(data => console.log('メール送信成功:', data))
+      .catch(error => console.error('エラー:', error));
     </script>
   </body>
 </html>
