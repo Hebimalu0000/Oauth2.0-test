@@ -3,19 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Auth with CDN</title>
+  <title>Firebase Auth with Email and Password</title>
   <!-- Firebase App CDN -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <!-- Firebase Auth CDN -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <!-- Firebase config -->
-  <script src="config.js"></script>
+  <!-- Firebase Config -->
+  <script src="./config.js"></script> <!-- config.js を読み込む -->
 </head>
 <body>
+  <h1>Login</h1>
+  <form id="login-form">
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+  <p id="message"></p>
+
   <script>
-    // Firebaseアプリを初期化
-    const app = firebase.initializeApp(firebaseConfig);
+    // Firebaseの初期化
+    const app = firebase.initializeApp(firebaseConfig); // config.jsの変数を使用
     const auth = firebase.getAuth(app);
+
+    // メッセージの表示用関数
+    const showMessage = (message) => {
+      document.getElementById("message").textContent = message;
+    };
 
     /**
      * 指定されたメールアドレスとパスワードでユーザ認証する.
@@ -30,17 +47,19 @@
         if (isNotVerified) {
           await reSendVerifyMail(userCredential.user);
           await signOut();
+          showMessage("Email is not verified. A new verification email has been sent.");
+        } else {
+          showMessage("Login successful!");
         }
-        console.log("User signed in successfully");
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":
           case "auth/invalid-email":
           case "auth/wrong-password":
-            console.error("Authentication error:", error.message);
+            showMessage("Invalid email or password.");
             break;
           default:
-            console.error("Other error:", error.message);
+            showMessage(`Error: ${error.message}`);
         }
       }
     }
@@ -58,10 +77,10 @@
       } catch (error) {
         switch (error.code) {
           case "auth/too-many-requests":
-            console.error("Too many requests:", error.message);
+            showMessage("Too many requests. Please wait and try again.");
             break;
           default:
-            console.error("Failed to send verification email:", error.message);
+            showMessage(`Failed to send verification email: ${error.message}`);
         }
       }
     }
@@ -77,6 +96,14 @@
         console.error("Failed to sign out:", error.message);
       }
     }
+
+    // フォームの送信イベントリスナー
+    document.getElementById("login-form").addEventListener("submit", async (event) => {
+      event.preventDefault(); // ページリロードを防ぐ
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      await signin(email, password);
+    });
   </script>
 </body>
 </html>
