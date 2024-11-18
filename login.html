@@ -1,19 +1,90 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Auth with CDN</title>
+  <!-- Firebase App CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <!-- Firebase Auth CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+</head>
+<body>
+  <script>
+    // Firebaseの初期化
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
-    authDomain: "auth-test-556c5.firebaseapp.com",
-    projectId: "auth-test-556c5",
-    storageBucket: "auth-test-556c5.firebasestorage.app",
-    messagingSenderId: "274619285634",
-    appId: "1:274619285634:web:d07e6c6d136041e23b749b"
-  };
+    // Firebaseアプリを初期化
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.getAuth(app);
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+    /**
+     * 指定されたメールアドレスとパスワードでユーザ認証する.
+     * メールアドレス未認証の場合は認証メールを再度送信する
+     * @param {string} email メールアドレス
+     * @param {string} password パスワード
+     */
+    async function signin(email, password) {
+      try {
+        const userCredential = await firebase.signInWithEmailAndPassword(auth, email, password);
+        const isNotVerified = !userCredential.user.emailVerified;
+        if (isNotVerified) {
+          await reSendVerifyMail(userCredential.user);
+          await signOut();
+        }
+        console.log("User signed in successfully");
+      } catch (error) {
+        switch (error.code) {
+          case "auth/user-not-found":
+          case "auth/invalid-email":
+          case "auth/wrong-password":
+            console.error("Authentication error:", error.message);
+            break;
+          default:
+            console.error("Other error:", error.message);
+        }
+      }
+    }
+
+    /**
+     * 指定されたユーザに再度アドレス認証メールを送信する
+     * @param {Object} user 対象のユーザー
+     */
+    async function reSendVerifyMail(user) {
+      try {
+        if (user) {
+          await firebase.sendEmailVerification(user);
+          console.log("Verification email sent successfully");
+        }
+      } catch (error) {
+        switch (error.code) {
+          case "auth/too-many-requests":
+            console.error("Too many requests:", error.message);
+            break;
+          default:
+            console.error("Failed to send verification email:", error.message);
+        }
+      }
+    }
+
+    /**
+     * ログアウトをする
+     */
+    async function signOut() {
+      try {
+        await firebase.signOut(auth);
+        console.log("User signed out successfully");
+      } catch (error) {
+        console.error("Failed to sign out:", error.message);
+      }
+    }
+  </script>
+</body>
+</html>
