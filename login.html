@@ -8,8 +8,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <!-- Firebase Auth CDN -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <!-- Firebase Config -->
-  <script src="./config.js" type="module"></script> <!-- config.js を読み込む -->
 </head>
 <body>
   <h1>Login</h1>
@@ -25,6 +23,15 @@
   <p id="message"></p>
 
   <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+      authDomain: "auth-test-556c5.firebaseapp.com",
+      projectId: "auth-test-556c5",
+      storageBucket: "auth-test-556c5.firebasestorage.app",
+      messagingSenderId: "274619285634",
+      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+    };
+    
     // Firebaseの初期化
     const app = firebase.initializeApp(firebaseConfig); // config.jsの変数を使用
     const auth = firebase.getAuth(app);
