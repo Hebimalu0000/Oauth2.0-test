@@ -32,14 +32,14 @@
     };
     
     // Firebaseの初期化
-    const app = firebase.initializeApp(firebaseConfig); // config.jsの変数を使用
-    const auth = firebase.getAuth(app);
+    const app = initializeApp(firebaseConfig); // config.jsの変数を使用
+    const auth = getAuth(app);
 
     login.addEventListener('click', function(e) {
       var mailAddress = document.getElementById('mailAddress').value;
       var password = document.getElementById('password').value;
   
-      firebase.auth().signInWithEmailAndPassword(mailAddress, password)
+      auth().signInWithEmailAndPassword(mailAddress, password)
       .catch(function(error) {
         alert('ログインできません（' + error.message + '）');
       });
