@@ -11,16 +11,10 @@
 </head>
 <body>
   <h1>Login</h1>
-  <form id="login-form">
-    <label for="email">Email:</label>
-    <input type="email" id="email" required>
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" required>
-    <br>
-    <button type="submit">Login</button>
-  </form>
-  <p id="message"></p>
+  <div>メールアドレス<input id="mailAddress" type="mailAddress" required/></div>
+  <div>パスワード<input id="password" type="password" required/></div>
+  <button id="login">ログイン</button>
+  <button id="register">新規登録</button>
 
   <script type="module">
     const firebaseConfig = {
@@ -36,80 +30,14 @@
     const app = firebase.initializeApp(firebaseConfig); // config.jsの変数を使用
     const auth = firebase.getAuth(app);
 
-    // メッセージの表示用関数
-    const showMessage = (message) => {
-      document.getElementById("message").textContent = message;
-    };
-
-    /**
-     * 指定されたメールアドレスとパスワードでユーザ認証する.
-     * メールアドレス未認証の場合は認証メールを再度送信する
-     * @param {string} email メールアドレス
-     * @param {string} password パスワード
-     */
-    async function signin(email, password) {
-      try {
-        const userCredential = await firebase.signInWithEmailAndPassword(auth, email, password);
-        const isNotVerified = !userCredential.user.emailVerified;
-        if (isNotVerified) {
-          await reSendVerifyMail(userCredential.user);
-          await signOut();
-          showMessage("Email is not verified. A new verification email has been sent.");
-        } else {
-          showMessage("Login successful!");
-        }
-      } catch (error) {
-        switch (error.code) {
-          case "auth/user-not-found":
-          case "auth/invalid-email":
-          case "auth/wrong-password":
-            showMessage("Invalid email or password.");
-            break;
-          default:
-            showMessage(`Error: ${error.message}`);
-        }
-      }
-    }
-
-    /**
-     * 指定されたユーザに再度アドレス認証メールを送信する
-     * @param {Object} user 対象のユーザー
-     */
-    async function reSendVerifyMail(user) {
-      try {
-        if (user) {
-          await firebase.sendEmailVerification(user);
-          console.log("Verification email sent successfully");
-        }
-      } catch (error) {
-        switch (error.code) {
-          case "auth/too-many-requests":
-            showMessage("Too many requests. Please wait and try again.");
-            break;
-          default:
-            showMessage(`Failed to send verification email: ${error.message}`);
-        }
-      }
-    }
-
-    /**
-     * ログアウトをする
-     */
-    async function signOut() {
-      try {
-        await firebase.signOut(auth);
-        console.log("User signed out successfully");
-      } catch (error) {
-        console.error("Failed to sign out:", error.message);
-      }
-    }
-
-    // フォームの送信イベントリスナー
-    document.getElementById("login-form").addEventListener("submit", async (event) => {
-      event.preventDefault(); // ページリロードを防ぐ
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      await signin(email, password);
+    login.addEventListener('click', function(e) {
+      var mailAddress = document.getElementById('mailAddress').value;
+      var password = document.getElementById('password').value;
+  
+      firebase.auth().signInWithEmailAndPassword(mailAddress, password)
+      .catch(function(error) {
+        alert('ログインできません（' + error.message + '）');
+      });
     });
   </script>
 </body>
