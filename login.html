@@ -9,7 +9,7 @@
   <!-- Firebase Auth CDN -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
   <!-- Firebase Config -->
-  <script src="./config.js"></script> <!-- config.js を読み込む -->
+  <script src="./config.js" type="module"></script> <!-- config.js を読み込む -->
 </head>
 <body>
   <h1>Login</h1>
@@ -24,7 +24,7 @@
   </form>
   <p id="message"></p>
 
-  <script>
+  <script type="module">
     // Firebaseの初期化
     const app = firebase.initializeApp(firebaseConfig); // config.jsの変数を使用
     const auth = firebase.getAuth(app);
