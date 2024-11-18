@@ -11,6 +11,7 @@
 
     signupCaptcha.addEventListener('verified', (e) => {
         console.log('verified event', {token: e.token});
+        window.half("login.html");
     });
     signupCaptcha.addEventListener('error', (e) => {
         console.log('error event', {error: e.error});
