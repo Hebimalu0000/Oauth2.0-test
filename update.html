@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Auth with Email and Password</title>
+</head>
+<body>
+  <h1>ログイン</h1>
+  <div>プレイヤーネーム<input id="display" type="text" required/></div>
+  <div>アイコンURL<input id="photo" type="url" required/></div>
+  <button id="register">新規登録</button>
+  <p id="messages"></p>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getAuth, updateProfile } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+      authDomain: "auth-test-556c5.firebaseapp.com",
+      projectId: "auth-test-556c5",
+      storageBucket: "auth-test-556c5.firebasestorage.app",
+      messagingSenderId: "274619285634",
+      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const register = document.getElementById('register');
+
+    register.addEventListener('click', () => {
+      const display = document.getElementById('display').value;
+      const photo = document.getElementById('photo').value;
+  
+      updateProfile(auth.currentUser, {
+        displayName: display, photoURL: photo
+      }).then(() => {
+        // Profile updated!
+        // ...
+      }).catch((error) => {
+        // An error occurred
+        // ...
+      });
+  </script>
+</body>
+</html>
