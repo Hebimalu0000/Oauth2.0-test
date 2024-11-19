@@ -6,16 +6,14 @@
   <title>Firebase Auth with Email and Password</title>
 </head>
 <body>
-  <h1>ログイン</h1>
-  <div>メールアドレス<input id="mailAddress" type="email" required/></div>
-  <div>パスワード<input id="password" type="password" required/></div>
-  <button id="login">ログイン</button>
-  <button id="register">新規登録</button>
+  <h1>アカウントの削除</h1>
+  <p id="user"></p>
+  <button id="delete">消去</button>
   <p id="messages"></p>
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    import { getAuth, deleteUser } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
     
     const firebaseConfig = {
       apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
@@ -29,21 +27,17 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
 
-    const register = document.getElementById('register');
+    document.getElementById('user').textContent = auth.currentUser;
 
-    register.addEventListener('click', () => {
-      const email = document.getElementById('mailAddress').value;
-      const password = document.getElementById('password').value;
-  
-      import { getAuth, deleteUser } from "firebase/auth";
+    const delete = document.getElementById('delete');
 
+    delete.addEventListener('click', () => {  
       const user = auth.currentUser;
 
       deleteUser(user).then(() => {
-        // User deleted.
+        document.getElementById('messages').textContent = 'アカウントを削除しました';
       }).catch((error) => {
-        // An error ocurred
-        // ...
+        document.getElementById('messages').textContent = 'Error:' + error;
       });
     });
   </script>
