@@ -6,17 +6,16 @@
   <title>Firebase Auth with Email and Password</title>
 </head>
 <body>
-  <h1>Login</h1>
-  <div>メールアドレス<input id="mailAddress" type="mailAddress" required/></div>
+  <h1>ログイン</h1>
+  <div>メールアドレス<input id="mailAddress" type="email" required/></div>
   <div>パスワード<input id="password" type="password" required/></div>
   <button id="login">ログイン</button>
   <button id="register">新規登録</button>
   <p id="messages"></p>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js'
-
-    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js'
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
     
     const firebaseConfig = {
       apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
@@ -30,22 +29,22 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
 
-    const register= document.getElementById('register');
+    const register = document.getElementById('register');
 
     register.addEventListener('click', () => {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
+      const email = document.getElementById('mailAddress').value;
+      const password = document.getElementById('password').value;
   
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed up 
-          const user = userCredential.user;
-          // ...
+          // 新規登録成功時の処理
+          document.getElementById('messages').textContent = '新規登録が完了しました！';
         })
         .catch((error) => {
+          // エラー時の処理
           const errorCode = error.code;
           const errorMessage = error.message;
-          document.getElementById('messages').textContent = 'Errors:' + errorCode + '/' + errorMessage;
+          document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
         });
     });
   </script>
