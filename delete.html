@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Auth with Email and Password</title>
+</head>
+<body>
+  <h1>ログイン</h1>
+  <div>メールアドレス<input id="mailAddress" type="email" required/></div>
+  <div>パスワード<input id="password" type="password" required/></div>
+  <button id="login">ログイン</button>
+  <button id="register">新規登録</button>
+  <p id="messages"></p>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+      authDomain: "auth-test-556c5.firebaseapp.com",
+      projectId: "auth-test-556c5",
+      storageBucket: "auth-test-556c5.firebasestorage.app",
+      messagingSenderId: "274619285634",
+      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const register = document.getElementById('register');
+
+    register.addEventListener('click', () => {
+      const email = document.getElementById('mailAddress').value;
+      const password = document.getElementById('password').value;
+  
+      import { getAuth, deleteUser } from "firebase/auth";
+
+      const user = auth.currentUser;
+
+      deleteUser(user).then(() => {
+        // User deleted.
+      }).catch((error) => {
+        // An error ocurred
+        // ...
+      });
+    });
+  </script>
+</body>
+</html>
