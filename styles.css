@@ -18,7 +18,7 @@ body {
   padding: 20px;
   border: 2px solid #555; /* ソフトなグレーのボーダー */
   border-radius: 10px; /* 少し丸みを持たせた角 */
-  background: linear-gradient(145deg, #111, #222); /* 高級感のあるグラデーション */
+  background: linear-gradient(145deg, #000, #111); /* 高級感のあるグラデーション */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* シャドウ効果 */
 }
 
