@@ -39,10 +39,20 @@
       var mailAddress = document.getElementById('mailAddress').value;
       var password = document.getElementById('password').value;
   
-      auth().signInWithEmailAndPassword(mailAddress, password)
-      .catch(function(error) {
-        alert('ログインできません（' + error.message + '）');
-      });
+      import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up 
+          const user = userCredential.user;
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+        });
     });
   </script>
 </body>
