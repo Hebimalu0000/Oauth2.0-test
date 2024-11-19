@@ -27,18 +27,28 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
 
-    document.getElementById('user').textContent = auth.currentUser;
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      document.getElementById('user').textContent = `ログイン中のユーザー: ${currentUser.email}`;
+    } else {
+      document.getElementById('user').textContent = 'ログイン中のユーザーがいません';
+    }
 
-    const delete = document.getElementById('delete');
+    // 削除ボタンのクリックイベント
+    const deleteButton = document.getElementById('delete');
 
-    delete.addEventListener('click', () => {  
+    deleteButton.addEventListener('click', () => {
       const user = auth.currentUser;
 
-      deleteUser(user).then(() => {
-        document.getElementById('messages').textContent = 'アカウントを削除しました';
-      }).catch((error) => {
-        document.getElementById('messages').textContent = 'Error:' + error;
-      });
+      if (user) {
+        deleteUser(user).then(() => {
+          document.getElementById('messages').textContent = 'アカウントを削除しました';
+        }).catch((error) => {
+          document.getElementById('messages').textContent = `エラー: ${error.message}`;
+        });
+      } else {
+        document.getElementById('messages').textContent = '削除できるユーザーがいません';
+      }
     });
   </script>
 </body>
