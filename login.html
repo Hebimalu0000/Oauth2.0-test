@@ -30,7 +30,9 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
 
-    register.addEventListener('click', function(e) {
+    const register= document.getElementById('register');
+
+    register.addEventListener('click', () => {
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
   
