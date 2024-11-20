@@ -2,6 +2,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@hcaptcha/vanilla-hcaptcha"></script>
 
+<select name="lang_select" onChange="location.href=value;">
+	<option>翻訳</option>
+	<option id="lang_ja" value="https://hebimalu0000.github.io/">日本語</option>
+	<option id="lang_en" value="https://translate.google.com/translate?sl=ja&tl=en&u=https://hebimalu0000.github.io/">English</option>
+	<option id="lang_es" value="https://translate.google.com/translate?sl=ja&tl=es&u=https://hebimalu0000.github.io/">Spanish</option>
+</select>
+
 <h-captcha id="signupCaptcha"
            site-key="b6ea4b5c-26f4-4f70-90e6-4938a292f9e8"
            size="normal"
