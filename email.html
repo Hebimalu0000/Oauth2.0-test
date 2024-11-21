@@ -34,17 +34,20 @@
     let h1 = document.getElementById('h1');
     let main = document.getElementById('p');
 
-    window.addEventListener('load', () => {
-      onAuthStateChanged(auth, (user) => {
-      if ( user.emailVerified == false ){
-          h1.innerText   = 'Email verification';
+    onAuthStateChanged(auth, (user) => {
+      if (user !== null) {
+        if ( user.emailVerified == false ){
+          h1.innerText = 'Email venullrification';
           main.innerText = 'A confirmation email has been sent to ' + user.email + '.';
           user.sendEmailVerification();
         }else{
-          h1.innerText   = 'Email authentication has been completed.';
+          h1.innerText = 'Email authentication has been completed.';
           main.innerText = 'Hello,' + user.displayName + '!';
+        }
+      }else{
+        h1.innerText = 'You not logined.';
+        main.innerText = 'Please go to login pages.';
       }
-      });
     });
     </script>
   </div>
