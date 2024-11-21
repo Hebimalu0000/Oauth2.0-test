@@ -15,53 +15,53 @@
       <h1>HELLO!</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       <p id="messages"></p>
-      <input type="text" id="email" placeholder="Email (or Username)" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="email" placeholder="Email (or Username)" required aria-label="Email">
+      <input type="password" id="password" placeholder="Password" required aria-label="Password">
       <div class="options">
         <label><input type="checkbox"> Remember</label>
         <a href="#">Forgot your password?</a>
       </div>
       <button id="login">Next</button>
-      <p><a href="singup">Create account</a></p>
+      <p><a href="signup">Create account</a></p>
     </div>
     <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
-      authDomain: "auth-test-556c5.firebaseapp.com",
-      projectId: "auth-test-556c5",
-      storageBucket: "auth-test-556c5.firebasestorage.app",
-      messagingSenderId: "274619285634",
-      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-
-    const login = document.getElementById('login');
-
-    login.addEventListener('click', () => {
-      event.preventDefault();
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
       
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-  
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // 新規登録成功時の処理
-          document.getElementById('messages').textContent = 'ログインしました！';
-          window.location.href = "email";
-        .catch((error) => {
-          // エラー時の処理
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
-        });
-    });
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const login = document.getElementById('login');
+
+      login.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Successful login
+            document.getElementById('messages').textContent = 'ログインしました！';
+            window.location.href = "email"; // Redirect to desired page
+          })
+          .catch((error) => {
+            // Handle error
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
+          });
+      });
     </script>
   </div>
 </body>
 </html>
-
