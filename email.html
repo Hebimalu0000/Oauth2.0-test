@@ -12,43 +12,54 @@
       <div class="background"></div>
     </div>
     <div class="form-section">
-      <h1 id='h1'>Loading...</h1>
-      <p id='p'>Loading...</p>
+      <h1 id="h1">Loading...</h1>
+      <p id="p">Loading...</p>
     </div>
     <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
-      authDomain: "auth-test-556c5.firebaseapp.com",
-      projectId: "auth-test-556c5",
-      storageBucket: "auth-test-556c5.firebasestorage.app",
-      messagingSenderId: "274619285634",
-      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
+      import { 
+        initializeApp 
+      } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { 
+        getAuth, 
+        onAuthStateChanged, 
+        sendEmailVerification 
+      } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-    let h1 = document.getElementById('h1');
-    let main = document.getElementById('p');
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.firebasestorage.app",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
 
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null) {
-        if ( user.emailVerified == false ){
-          h1.innerText = 'Email venullrification';
-          main.innerText = 'A confirmation email has been sent to ' + user.email + '.';
-          user.sendEmailVerification();
-        }else{
-          h1.innerText = 'Email authentication has been completed.';
-          main.innerText = 'Hello,' + user.displayName + '!';
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const h1 = document.getElementById('h1');
+      const main = document.getElementById('p');
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          if (!user.emailVerified) {
+            h1.innerText = 'Email Verification Required';
+            main.innerText = `A confirmation email has been sent to ${user.email}. Please verify your email.`;
+            sendEmailVerification(user)
+              .then(() => console.log('Verification email sent.'))
+              .catch((error) => console.error('Error sending email verification:', error));
+          } else {
+            h1.innerText = 'Authentication Complete';
+            main.innerText = `Hello, ${user.displayName || 'User'}!`;
+          }
+        } else {
+          h1.innerText = 'Not Logged In';
+          main.innerText = 'Please log in. Redirecting to login page...';
+          setTimeout(() => {
+            window.location.href = 'login'; // Replace with your login page URL
+          }, 3000);
         }
-      }else{
-        h1.innerText = 'You not logined.';
-        main.innerText = 'Please go to login pages.';
-      }
-    });
+      });
     </script>
   </div>
 </body>
