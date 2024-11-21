@@ -12,18 +12,8 @@
       <div class="background"></div>
     </div>
     <div class="form-section">
-      <h1>HELLO!</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <form>
-        <input type="text" id="email" placeholder="Email (or Username)" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <div class="options">
-          <label><input type="checkbox"> Remember</label>
-          <a href="#">Forgot your password?</a>
-        </div>
-        <button id="login">Next</button>
-        <p><a href="singup">Create account</a></p>
-      </form>
+      <h1 id='h1'>Loading...</h1>
+      <p id='p'>Loading...</p>
     </div>
     <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
@@ -41,18 +31,18 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
 
-    let h1 = document.querySelector('h1');
-    let main = document.querySelector('#main');
+    let h1 = document.getElementById('h1');
+    let main = document.getElementById('p');
 
     window.addEventListener('load', () => {
       onAuthStateChanged(auth, (user) => {
       if ( user.emailVerified == false ){
           h1.innerText   = 'Email verification';
-          main.innerHTML = 'A confirmation email has been sent to ' + user.email + '.';
+          main.innerText = 'A confirmation email has been sent to ' + user.email + '.';
           user.sendEmailVerification();
         }else{
           h1.innerText   = 'Email authentication has been completed.';
-          main.innerHTML = 'Hello,' + user.displayName + '!';
+          main.innerText = 'Hello,' + user.displayName + '!';
       }
       });
     });
