@@ -1,53 +1,102 @@
-/* ベーススタイル */
-body {
+* {
   margin: 0;
   padding: 0;
-  background-color: #111; /* 黒背景 */
-  color: #777; /* 白いテキスト */
-  font-family: 'Arial', sans-serif; /* モダンでリッチなフォント */
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #003b8b, #0073e6);
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  text-align: center;
 }
 
-/* コンテンツを中央に配置 */
-.div {
-  max-width: 800px;
-  padding: 20px;
-  border: 2px solid #555; /* ソフトなグレーのボーダー */
-  border-radius: 10px; /* 少し丸みを持たせた角 */
-  background: linear-gradient(145deg, #000, #111); /* 高級感のあるグラデーション */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* シャドウ効果 */
+.container {
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  background: #fff;
+  color: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* 見出しスタイル */
+.image-section {
+  flex: 1;
+  position: relative;
+}
+
+.image-section .background {
+  background: url('background.jpg') no-repeat center center/cover;
+  width: 100%;
+  height: 100%;
+}
+
+.form-section {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 h1 {
-  font-size: 2.5em;
-  color: #555; /* ゴールドカラー */
+  color: #003b8b;
+  margin-bottom: 10px;
+}
+
+p {
   margin-bottom: 20px;
 }
 
-/* パラグラフスタイル */
-p {
-  font-size: 1.2em;
-  line-height: 1.8;
+form {
+  display: flex;
+  flex-direction: column;
 }
 
-/* ボタンのスタイル */
+input {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input:focus {
+  border-color: #003b8b;
+  outline: none;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
 button {
-  background-color: #555; /* ゴールド */
-  color: #000;
-  padding: 10px 20px;
+  padding: 10px 15px;
+  background: #003b8b;
+  color: #fff;
   border: none;
   border-radius: 5px;
-  font-size: 1em;
+  font-size: 16px;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
 }
 
 button:hover {
-  background-color: #666; /* 明るいゴールド */
-  transform: scale(1.1); /* ホバー時に少し拡大 */
+  background: #0057b3;
+}
+
+a {
+  color: #003b8b;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
