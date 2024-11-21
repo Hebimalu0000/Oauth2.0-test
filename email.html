@@ -1,66 +1,62 @@
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Please Wait...</title>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-  </head>
-  <body>
-    <p>Please Wait...</p>
-    <script>
-      // 現在のURLからクエリパラメータを取得
-      let url = new URL(window.location.href);
-      let params = url.searchParams;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>HELLO!</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <form>
+        <input type="text" id="email" placeholder="Email (or Username)" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="options">
+          <label><input type="checkbox"> Remember</label>
+          <a href="#">Forgot your password?</a>
+        </div>
+        <button id="login">Next</button>
+        <p><a href="singup">Create account</a></p>
+      </form>
+    </div>
+    <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+      authDomain: "auth-test-556c5.firebaseapp.com",
+      projectId: "auth-test-556c5",
+      storageBucket: "auth-test-556c5.firebasestorage.app",
+      messagingSenderId: "274619285634",
+      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
 
-      var email = params.get('email');
-      var type = params.get('type');
-      var redirect = params.get('redirect');
+    let h1 = document.querySelector('h1');
+    let main = document.querySelector('#main');
 
-      var name = "User";
-
-      // メッセージデータを格納したJSONファイルのURL
-      var jsonUrl = './messages.json';
-
-      // JSONファイルを取得し、その内容を使用してメールを送信
-      fetch(jsonUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('JSONファイルの取得に失敗しました');
-          }
-          return response.json();
-        })
-        .then(data => {
-          // JSONからtypeに基づくメッセージを取得
-          var message = data[type];
-          if (!message) {
-            throw new Error('指定されたtypeに対応するメッセージが見つかりません');
-          }
-
-          // メールを送信
-          return fetch('https://email-api-service.com/send', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: email,
-              message: message
-            })
-          });
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('メール送信に失敗しました');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('メール送信成功:', data);
-        })
-        .catch(error => {
-          console.error('エラー:', error);
-        });
+    window.addEventListener('load', () => {
+      onAuthStateChanged(auth, (user) => {
+      if ( user.emailVerified == false ){
+          h1.innerText   = 'Email verification';
+          main.innerHTML = 'A confirmation email has been sent to ' + user.email + '.';
+          user.sendEmailVerification();
+        }else{
+          h1.innerText   = 'Email authentication has been completed.';
+          main.innerHTML = 'Hello,' + user.displayName + '!';
+      }
+      });
+    });
     </script>
-  </body>
+  </div>
+</body>
 </html>
