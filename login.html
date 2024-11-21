@@ -51,6 +51,7 @@
         .then((userCredential) => {
           // 新規登録成功時の処理
           document.getElementById('messages').textContent = 'ログインしました！';
+          window.location.href("email");
         })
         .catch((error) => {
           // エラー時の処理
