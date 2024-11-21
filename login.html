@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html lang="jp">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Auth with Email and Password</title>
+  <title>Login Page</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="">
-  <h1>ログイン</h1>
-  <hr>
-  <div>メールアドレス:<input id="mailAddress" type="email" required/></div><br>
-  <div>　　パスワード:<input id="password" type="password" required/></div><br>
-  <button id="login">ログイン</button>
-  <p id="messages"></p><br>
-  <hr>
-  <a href="singup">アカウントを持っていませんか？作成しましょう!</a>
-
-  <script type="module">
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>HELLO!</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <form>
+        <input type="text" id="email" placeholder="Email (or Username)" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="options">
+          <label><input type="checkbox"> Remember</label>
+          <a href="#">Forgot your password?</a>
+        </div>
+        <button id="login">Next</button>
+        <p><a href="singup">Create account</a></p>
+      </form>
+    </div>
+    <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
     import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
     
@@ -36,7 +44,7 @@
     const login = document.getElementById('login');
 
     login.addEventListener('click', () => {
-      const email = document.getElementById('mailAddress').value;
+      const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
   
       signInWithEmailAndPassword(auth, email, password)
@@ -51,7 +59,8 @@
           document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
         });
     });
-  </script>
+    </script>
   </div>
 </body>
 </html>
+
