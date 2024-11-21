@@ -44,6 +44,8 @@
     const login = document.getElementById('login');
 
     login.addEventListener('click', () => {
+      event.preventDefault();
+      
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
   
