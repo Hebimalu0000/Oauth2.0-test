@@ -148,10 +148,10 @@
               document.getElementById('profile-age').textContent = userData.age;
               document.getElementById('profile-gender').textContent = userData.gender;
             } else {
-              console.log("No such document!");
+              messages.textContent =　"No such document!";
             }
           }).catch((error) => {
-            console.error("Error getting document: ", error);
+            messages.textContent = "Error getting document: "　+ error;
           });
         } else {
           // ログインしていない場合はログインページにリダイレクト
