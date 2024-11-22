@@ -1,55 +1,68 @@
 <!DOCTYPE html>
-<html lang="jp">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Auth with Email and Password</title>
+  <title>Delete Account</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>アカウントの削除</h1>
-  <p id="user"></p>
-  <button id="delete">消去</button>
-  <p id="messages"></p>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>Delete Your Account</h1>
+      <p>Are you sure you want to delete your account? This action is irreversible.</p>
+      <p id="messages"></p>
+      <div class="options">
+        <a href="profile">Go back to profile</a>
+      </div>
+      <button id="delete-account">Delete Account</button>
+    </div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, deleteUser } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-    import { getAuth, deleteUser } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
-      authDomain: "auth-test-556c5.firebaseapp.com",
-      projectId: "auth-test-556c5",
-      storageBucket: "auth-test-556c5.firebasestorage.app",
-      messagingSenderId: "274619285634",
-      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
+      const deleteAccountButton = document.getElementById('delete-account');
+      
+      deleteAccountButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        const user = auth.currentUser;
 
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      document.getElementById('user').textContent = `ログイン中のユーザー: ${currentUser.email}`;
-    } else {
-      document.getElementById('user').textContent = 'ログイン中のユーザーがいません';
-    }
-
-    // 削除ボタンのクリックイベント
-    const deleteButton = document.getElementById('delete');
-
-    deleteButton.addEventListener('click', () => {
-      const user = auth.currentUser;
-
-      if (user) {
-        deleteUser(user).then(() => {
-          document.getElementById('messages').textContent = 'アカウントを削除しました';
-        }).catch((error) => {
-          document.getElementById('messages').textContent = `エラー: ${error.message}`;
-        });
-      } else {
-        document.getElementById('messages').textContent = '削除できるユーザーがいません';
-      }
-    });
-  </script>
+        if (user) {
+          deleteUser(user)
+            .then(() => {
+              // アカウント削除成功
+              document.getElementById('messages').textContent = 'アカウントが削除されました。';
+              // 必要に応じて、ユーザーをログアウトさせたり、ページをリダイレクトさせることができます
+              auth.signOut(); 
+              window.location.href = 'login'; // goodbyeページへリダイレクト
+            })
+            .catch((error) => {
+              // エラーハンドリング
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
+            });
+        } else {
+          document.getElementById('messages').textContent = 'ログインしていません。アカウントを削除するにはログインしてください。';
+        }
+      });
+    </script>
+  </div>
 </body>
 </html>
