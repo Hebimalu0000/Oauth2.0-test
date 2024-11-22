@@ -145,7 +145,7 @@
               const userData = docSnapshot.data();
               // 取得したデータをHTMLに表示
               document.getElementById('profile-email').textContent = userData.email;
-              document.getElementById('profile-age').textContent = userData.age;
+              document.getElementById('profile-barthday').textContent = userData.barthday;
               document.getElementById('profile-gender').textContent = userData.gender;
             } else {
               messages.textContent =　"No such document!";
