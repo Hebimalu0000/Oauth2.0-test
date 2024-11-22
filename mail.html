@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Email Address</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>Reset Email Address</h1>
+      <p>Are you sure you want to reset new email address? This action is irreversible.</p>
+      <p id="messages"></p>
+      <input type="email" id="newemail">
+      <div class="options">
+        <a href="profile">Go back to profile</a>
+      </div>
+      <button id="email-account">Reset Mail Address</button>
+    </div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, update } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const emailAccountButton = document.getElementById('email-account');
+      const newemail = document.getElementById('newemail');
+      
+      emailAccountButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        const user = auth.currentUser;
+
+        if (user) {
+          updateEmail(user,newemail)
+            .then(() => {
+              // アカウント削除成功
+              document.getElementById('messages').textContent = 'メールアドレスを更新しました。';
+              window.location.href = 'email'; // goodbyeページへリダイレクト
+            })
+            .catch((error) => {
+              // エラーハンドリング
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
+            });
+        } else {
+          document.getElementById('messages').textContent = 'ログインしていません。メールアドレスを更新するにはログインしてください。';
+        }
+      });
+    </script>
+  </div>
+</body>
+</html>
