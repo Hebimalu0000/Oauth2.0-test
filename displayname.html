@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Display Name</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>Update Your Display Name</h1>
+      <p id="messages"></p>
+      <input type="text" id="newDisplayName" placeholder="New Display Name" aria-label="New Display Name" required>
+      <button id="updateDisplayName">Update Display Name</button>
+    </div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, updateProfile } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const updateDisplayNameButton = document.getElementById('updateDisplayName');
+
+      updateDisplayNameButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const newDisplayName = document.getElementById('newDisplayName').value;
+        const user = auth.currentUser;
+
+        if (user) {
+          // Firebase AuthenticationでログインしているユーザーのdisplayNameを更新
+          updateProfile(user, {
+            displayName: newDisplayName
+          }).then(() => {
+            // 更新成功時の処理
+            document.getElementById('messages').textContent = 'Display Nameが更新されました！';
+          }).catch((error) => {
+            // 更新失敗時の処理
+            const errorMessage = error.message;
+            document.getElementById('messages').textContent = `Display Nameの更新に失敗しました: ${errorMessage}`;
+          });
+        } else {
+          document.getElementById('messages').textContent = 'ログインしていません。';
+        }
+      });
+    </script>
+  </div>
+</body>
+</html>
