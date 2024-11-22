@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     .profile-item {
       margin-bottom: 10px;
@@ -14,16 +15,14 @@
       margin-right: 10px;
     }
 
-    .edit-button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 5px 10px;
+    .edit-icon {
+      font-size: 24px;
+      color: #4CAF50;
       cursor: pointer;
     }
 
-    .edit-button:hover {
-      background-color: #45a049;
+    .edit-icon:hover {
+      color: #45a049;
     }
 
     .icon-container {
@@ -33,7 +32,6 @@
 
     .icon-container img {
       margin-right: 10px;
-      border-radius:50%;
     }
   </style>
 </head>
@@ -50,14 +48,14 @@
       <div class="profile-item">
         <strong>Display Name:</strong>
         <span id="user-name"></span>
-        <button class="edit-button" id="edit-name">✎</button>
+        <button class="edit-button" id="edit-name"><i class="fas fa-pencil-alt edit-icon"></i></button>
       </div>
 
       <!-- Email -->
       <div class="profile-item">
         <strong>Email:</strong>
         <span id="user-email"></span>
-        <button class="edit-button" id="edit-email">✎</button>
+        <button class="edit-button" id="edit-email"><i class="fas fa-pencil-alt edit-icon"></i></button>
       </div>
 
       <!-- User ID -->
@@ -70,7 +68,7 @@
       <div class="profile-item icon-container">
         <strong>Profile Icon:</strong>
         <img id="user-icon" src="" alt="User Icon" width="50" height="50">
-        <button class="edit-button" id="edit-icon">✎</button>
+        <button class="edit-button" id="edit-icon"><i class="fas fa-pencil-alt edit-icon"></i></button>
       </div>
 
       <!-- Delete Account -->
