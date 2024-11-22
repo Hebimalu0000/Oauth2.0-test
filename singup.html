@@ -27,6 +27,18 @@
           <input type="number" id="month" placeholder="MM" min="1" max="12" required>
           <input type="number" id="date" placeholder="DD" min="1" max="31" required>
         </div>
+        <div class="gender-options">
+          <p>Select your gender:</p>
+          <label>
+            <input type="radio" name="gender" value="male" required> Male
+          </label>
+          <label>
+            <input type="radio" name="gender" value="female" required> Female
+          </label>
+          <label>
+            <input type="radio" name="gender" value="other" required> Other
+          </label>
+        </div>
         <button id="signup">Next</button>
       </form>
       <p id="messages" style="color: red; font-weight: bold;"></p>
@@ -35,6 +47,7 @@
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
       import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
       const firebaseConfig = {
         apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
@@ -47,10 +60,11 @@
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth();
+      const db = getFirestore();
 
       const signupForm = document.getElementById('signup-form');
 
-      signupForm.addEventListener('submit', (event) => {
+      signupForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const email = document.getElementById('email').value;
@@ -58,6 +72,12 @@
         const year = parseInt(document.getElementById('year').value, 10);
         const month = parseInt(document.getElementById('month').value, 10);
         const date = parseInt(document.getElementById('date').value, 10);
+        const gender = document.querySelector('input[name="gender"]:checked');
+
+        if (!gender) {
+          document.getElementById('messages').textContent = "Please select your gender.";
+          return;
+        }
 
         const age = getAgeFromInputs(year, month, date);
 
@@ -71,13 +91,23 @@
           return;
         }
 
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            document.getElementById('messages').textContent = 'Account successfully created!';
-          })
-          .catch((error) => {
-            document.getElementById('messages').textContent = `Error: ${error.code} / ${error.message}`;
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+
+          // Save additional data to Firestore
+          const userDoc = doc(db, "users", user.uid);
+          await setDoc(userDoc, {
+            email: email,
+            barthday: year + "/" + month+ "/" + date,
+            gender: gender.value,
+            signupDate: new Date().toISOString()
           });
+
+          document.getElementById('messages').textContent = 'Account successfully created!';
+        } catch (error) {
+          document.getElementById('messages').textContent = `Error: ${error.code} / ${error.message}`;
+        }
       });
 
       function getAgeFromInputs(year, month, date) {
