@@ -64,7 +64,7 @@
       const age = getAgeFromInputs(year, month, date);
       
       if(age !== null){
-        if(age > "12"){
+        if(age > 12){
           window.location.href = "children";
         }else{
           createUserWithEmailAndPassword(auth, email, password)
