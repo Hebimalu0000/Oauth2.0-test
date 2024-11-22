@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .profile-item {
+      margin-bottom: 10px;
+    }
+
+    .profile-item span {
+      margin-right: 10px;
+    }
+
+    .edit-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .edit-button:hover {
+      background-color: #45a049;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon-container img {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>Profile</h1>
+      <p id="messages"></p>
+
+      <!-- Display Name -->
+      <div class="profile-item">
+        <strong>Display Name:</strong>
+        <span id="user-name"></span>
+        <button class="edit-button" id="edit-name">Edit</button>
+      </div>
+
+      <!-- Email -->
+      <div class="profile-item">
+        <strong>Email:</strong>
+        <span id="user-email"></span>
+        <button class="edit-button" id="edit-email">Edit</button>
+      </div>
+
+      <!-- User ID -->
+      <div class="profile-item">
+        <strong>User ID:</strong>
+        <span id="user-uid"></span>
+      </div>
+
+      <!-- Profile Icon with Edit Button -->
+      <div class="profile-item icon-container">
+        <strong>Profile Icon:</strong>
+        <img id="user-icon" src="" alt="User Icon" width="100" height="100">
+        <button class="edit-button" id="edit-icon">Edit</button>
+      </div>
+    </div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const messages = document.getElementById('messages');
+      const userIcon = document.getElementById('user-icon');
+      const userName = document.getElementById('user-name');
+      const userEmail = document.getElementById('user-email');
+      const userUid = document.getElementById('user-uid');
+
+      // ユーザーのログイン状態を確認
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // ユーザー情報を表示
+          userName.textContent = user.displayName || 'No display name';
+          userEmail.textContent = user.email;
+          userUid.textContent = user.uid;
+          userIcon.src = user.photoURL || 'default-icon.jpg'; // アイコンが設定されていない場合はデフォルト画像
+        } else {
+          // ログインしていない場合はログインページにリダイレクト
+          messages.textContent = 'ログインしていません。ログインページに移動します。';
+          setTimeout(() => {
+            window.location.href = 'login.html'; // ログインページにリダイレクト
+          }, 2000); // 2秒後にリダイレクト
+        }
+      });
+
+      // 編集ボタンのクリックイベントでページ遷移
+      document.getElementById('edit-name').addEventListener('click', () => {
+        window.location.href = 'edit-name.html'; // 名前編集ページへ遷移
+      });
+
+      document.getElementById('edit-email').addEventListener('click', () => {
+        window.location.href = 'edit-email.html'; // メールアドレス編集ページへ遷移
+      });
+
+      // アイコン編集ボタンのクリックイベントでページ遷移
+      document.getElementById('edit-icon').addEventListener('click', () => {
+        window.location.href = 'edit-icon.html'; // アイコン編集ページへ遷移
+      });
+    </script>
+  </div>
+</body>
+</html>
