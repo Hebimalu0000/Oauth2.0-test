@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Reset</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>HELLO!</h1>
+      <p>If you've forgotten your password, enter your email to reset it.</p>
+      <p id="messages"></p>
+      <input type="text" id="email" placeholder="Email (or Username)" required aria-label="Email">
+      <div class="options">
+        <a href="#" id="forgot-password-link">Forgot your password?</a>
+      </div>
+      <button id="reset-password">Send Password Reset Email</button>
+      <p><a href="signup">Create account</a></p>
+    </div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.appspot.com",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      const resetPasswordButton = document.getElementById('reset-password');
+      
+      resetPasswordButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        
+        if (email) {
+          sendPasswordResetEmail(auth, email)
+            .then(() => {
+              // パスワード再設定メールが送信されました
+              document.getElementById('messages').textContent = 'パスワード再設定のメールを送信しました。';
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
+            });
+        } else {
+          document.getElementById('messages').textContent = 'メールアドレスを入力してください。';
+        }
+      });
+    </script>
+  </div>
+</body>
+</html>
