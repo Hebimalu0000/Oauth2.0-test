@@ -101,7 +101,7 @@
           userName.textContent = user.displayName || 'No display name';
           userEmail.textContent = user.email;
           userUid.textContent = user.uid;
-          userIcon.src = user.photoURL || 'default-icon.jpg'; // アイコンが設定されていない場合はデフォルト画像
+          userIcon.src = user.photoURL || 'default-icon.png'; // アイコンが設定されていない場合はデフォルト画像
         } else {
           // ログインしていない場合はログインページにリダイレクト
           messages.textContent = 'ログインしていません。ログインページに移動します。';
