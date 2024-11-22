@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Singup Page</title>
+  <title>Signup Page</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,99 +14,90 @@
     <div class="form-section">
       <h1>HELLO!</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <input type="text" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <div class="options">
-        <label><input type="checkbox" required> I agree to the <a href="#">terms of use</a>.</label>
-      </div>
-      <div>
-        <label><input type="number" id="year" placeholder="YYYY" /><input type="number" id="month" placeholder="MM" /><input type="number" id="date" placeholder="DD" /></label>
-      </div>
-      <button id="singup">Next</button>
+      <form id="signup-form">
+        <input type="text" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="options">
+          <label>
+            <input type="checkbox" id="terms" required> I agree to the <a href="#">terms of use</a>.
+          </label>
+        </div>
+        <div>
+          <label for="birthdate">Enter your birthdate:</label>
+          <input type="number" id="year" placeholder="YYYY" min="1900" max="2024" required>
+          <input type="number" id="month" placeholder="MM" min="1" max="12" required>
+          <input type="number" id="date" placeholder="DD" min="1" max="31" required>
+        </div>
+        <button id="signup">Next</button>
+      </form>
+      <p id="messages" style="color: red; font-weight: bold;"></p>
       <p><a href="login">I have an account</a></p>
     </div>
     <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
-      authDomain: "auth-test-556c5.firebaseapp.com",
-      projectId: "auth-test-556c5",
-      storageBucket: "auth-test-556c5.firebasestorage.app",
-      messagingSenderId: "274619285634",
-      appId: "1:274619285634:web:d07e6c6d136041e23b749b"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+      import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-    const singup = document.getElementById('singup');
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
+        authDomain: "auth-test-556c5.firebaseapp.com",
+        projectId: "auth-test-556c5",
+        storageBucket: "auth-test-556c5.firebasestorage.app",
+        messagingSenderId: "274619285634",
+        appId: "1:274619285634:web:d07e6c6d136041e23b749b"
+      };
 
-    singup.addEventListener('click', () => {
-      event.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
 
-      // 各入力値を取得
-      const year = parseInt(document.getElementById('year').value, 10);
-      const month = parseInt(document.getElementById('month').value, 10);
-      const date = parseInt(document.getElementById('date').value, 10);
+      const signupForm = document.getElementById('signup-form');
 
-      // 入力チェック
-      if (isNaN(year) || isNaN(month) || isNaN(date)) {
-        document.getElementById('messages').textContent = "正しい生年月日を入力してください。";
-        return;
-      }
+      signupForm.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-      // 年齢を計算して表示
-      const age = getAgeFromInputs(year, month, date);
-      
-      if(age !== null){
-        if(age > 12){
-          window.location.href = "children";
-        }else{
-          createUserWithEmailAndPassword(auth, email, password)
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const year = parseInt(document.getElementById('year').value, 10);
+        const month = parseInt(document.getElementById('month').value, 10);
+        const date = parseInt(document.getElementById('date').value, 10);
+
+        const age = getAgeFromInputs(year, month, date);
+
+        if (age === null || isNaN(age)) {
+          document.getElementById('messages').textContent = "Please enter a valid birthdate.";
+          return;
+        }
+
+        if (age < 13) {
+          document.getElementById('messages').textContent = "You must be 13 years or older to sign up.";
+          return;
+        }
+
+        createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
-            // 新規登録成功時の処理
-            document.getElementById('messages').textContent = 'ログインしました！';
+            document.getElementById('messages').textContent = 'Account successfully created!';
           })
           .catch((error) => {
-            // エラー時の処理
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            document.getElementById('messages').textContent = `エラー: ${errorCode} / ${errorMessage}`;
+            document.getElementById('messages').textContent = `Error: ${error.code} / ${error.message}`;
           });
+      });
+
+      function getAgeFromInputs(year, month, date) {
+        const today = new Date();
+        const birthday = new Date(year, month - 1, date);
+
+        if (isNaN(birthday.getTime())) {
+          return null;
         }
-      }else{
-        document.getElementById('messages').textContent = "Date is invalid.";
+
+        let age = today.getFullYear() - birthday.getFullYear();
+        const thisYearsBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+
+        if (today < thisYearsBirthday) {
+          age--;
+        }
+
+        return age;
       }
-    });
-    // 年齢を計算する関数
-    function getAgeFromInputs(year, month, date) {
-      // 今日の日付を取得
-      const today = new Date();
-
-      // 入力された年、月、日からDateオブジェクトを作成
-      const birthday = new Date(year, month - 1, date); // 月は0始まりなので-1
-
-      // 入力が無効な日付でないか確認
-      if (isNaN(birthday.getTime())) {
-        return null;
-      }
-
-      // 年齢を計算
-      let age = today.getFullYear() - birthday.getFullYear();
-
-      // 今年の誕生日がまだ来ていない場合は年齢を1引く
-      const thisYearsBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
-      if (today < thisYearsBirthday) {
-        age--;
-      }
-
-      return age;
-    }
     </script>
   </div>
 </body>
