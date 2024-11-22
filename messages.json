@@ -1,5 +1,0 @@
-{
-  "singup": "Hello,${name}! ¥n Thanks you very match! ¥n 〇〇 Teams.",
-  "auth": "Hello,${name}! ¥n Please submit this auth code. ¥n 〇〇 Teams.",
-  "reminder": "これはリマインダーの通知です。"
-}
