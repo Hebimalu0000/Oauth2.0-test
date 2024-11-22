@@ -79,6 +79,27 @@
         <button class="edit-button" id="edit-icon"><i class="fas fa-pencil-alt edit-icon"></i></button>
       </div>
 
+      <!-- User Barthday -->
+      <div class="profile-item">
+        <strong>User Barthday:</strong>
+        <span id="user-barthday"></span>
+        <button class="edit-button" id="edit-barthday"><i class="fas fa-pencil-alt edit-icon"></i></button>
+      </div>
+
+      <!-- User Gender -->
+      <div class="profile-item">
+        <strong>User Gender:</strong>
+        <span id="user-gender"></span>
+        <button class="edit-button" id="edit-gender"><i class="fas fa-pencil-alt edit-icon"></i></button>
+      </div>
+
+      <!-- User Password -->
+      <div class="profile-item">
+        <strong>User Password:</strong>
+        <span>Not available due to confidentiality.</span>
+        <button class="edit-button" id="edit-password"><i class="fas fa-pencil-alt edit-icon"></i></button>
+      </div>
+
       <!-- Delete Account -->
       <div class="profile-item del">
         <strong>Delete this Account</strong>
@@ -88,6 +109,7 @@
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
       import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+      import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
       
       const firebaseConfig = {
         apiKey: "AIzaSyC4guPinRRwZ3AlBdeiZMbn4XKq6_-d1Bo",
@@ -100,6 +122,7 @@
       
       const app = initializeApp(firebaseConfig);
       const auth = getAuth();
+      const db = getFirestore();
 
       const messages = document.getElementById('messages');
       const userIcon = document.getElementById('user-icon');
@@ -115,6 +138,21 @@
           userEmail.textContent = user.email;
           userUid.textContent = user.uid;
           userIcon.src = user.photoURL || 'default-icon.png'; // アイコンが設定されていない場合はデフォルト画像
+          // Firestoreからユーザーデータを取得
+          const userDoc = doc(db, "users", user.uid);
+          getDoc(userDoc).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const userData = docSnapshot.data();
+              // 取得したデータをHTMLに表示
+              document.getElementById('profile-email').textContent = userData.email;
+              document.getElementById('profile-age').textContent = userData.age;
+              document.getElementById('profile-gender').textContent = userData.gender;
+            } else {
+              console.log("No such document!");
+            }
+          }).catch((error) => {
+            console.error("Error getting document: ", error);
+          });
         } else {
           // ログインしていない場合はログインページにリダイレクト
           messages.textContent = 'ログインしていません。ログインページに移動します。';
@@ -126,16 +164,28 @@
 
       // 編集ボタンのクリックイベントでページ遷移
       document.getElementById('edit-name').addEventListener('click', () => {
-        window.location.href = 'edit-name.html'; // 名前編集ページへ遷移
+        window.location.href = 'displayname'; // 名前編集ページへ遷移
       });
 
       document.getElementById('edit-email').addEventListener('click', () => {
-        window.location.href = 'edit-email.html'; // メールアドレス編集ページへ遷移
+        window.location.href = 'email'; // メールアドレス編集ページへ遷移
       });
 
       // アイコン編集ボタンのクリックイベントでページ遷移
       document.getElementById('edit-icon').addEventListener('click', () => {
-        window.location.href = 'edit-icon.html'; // アイコン編集ページへ遷移
+        window.location.href = 'icon'; // アイコン編集ページへ遷移
+      });
+
+      document.getElementById('edit-barthday').addEventListener('click', () => {
+        window.location.href = 'barthday'; // アイコン編集ページへ遷移
+      });
+
+      document.getElementById('edit-gender').addEventListener('click', () => {
+        window.location.href = 'gender'; // アイコン編集ページへ遷移
+      });
+
+      document.getElementById('edit-password').addEventListener('click', () => {
+        window.location.href = 'reset'; // アイコン編集ページへ遷移
       });
     </script>
   </div>
