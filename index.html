@@ -1,20 +1,27 @@
-<link rel="stylesheet" href="styles.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@hcaptcha/vanilla-hcaptcha"></script>
-
-<select name="lang_select" onChange="location.href=value;">
-	<option>翻訳</option>
-	<option id="lang_ja" value="https://hebimalu0000.github.io/">日本語</option>
-	<option id="lang_en" value="https://hebimalu0000-github-io.translate.goog/Oauth2.0-test/?_x_tr_sl=ja&_x_tr_tl=en&_x_tr_hl=ja&_x_tr_pto=wapp">English</option>
-	<option id="lang_es" value="https://hebimalu0000-github-io.translate.goog/Oauth2.0-test/?_x_tr_sl=ja&_x_tr_tl=es&_x_tr_hl=ja&_x_tr_pto=wapp">Spanish</option>
-</select>
-
-<h-captcha id="signupCaptcha"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="image-section">
+      <div class="background"></div>
+    </div>
+    <div class="form-section">
+      <h1>HELLO!</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h-captcha id="signupCaptcha"
            site-key="b6ea4b5c-26f4-4f70-90e6-4938a292f9e8"
            size="normal"
            tabindex="0"></h-captcha>
-
-<script>
+      <script src="https://cdn.jsdelivr.net/npm/@hcaptcha/vanilla-hcaptcha"></script>
+    </div>
+    <script>
     const signupCaptcha = document.getElementById('signupCaptcha');
 
     signupCaptcha.addEventListener('verified', (e) => {
@@ -24,4 +31,7 @@
     signupCaptcha.addEventListener('error', (e) => {
         console.log('error event', {error: e.error});
     });
-</script>
+    </script>
+  </div>
+</body>
+</html>
